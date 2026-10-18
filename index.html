@@ -554,10 +554,10 @@ const STOPS = [
       "This reads handwritten town names in historical records held by Ghana's National House of Chiefs. It was my SURF research project. The records came from Dr. Kevin Fridy, and Dr. Matthew Lepinski was my mentor.",
       'The pipeline cleans the scan, finds the boxes with names in them, splits out the letters, classifies each one with a CNN, and then matches the word against a list of Ghanaian town names. I tested four ways of cleaning the scans, and morphological subtraction did the best job of keeping the handwriting while removing the background.',
       'The models reached 93% on the EMNIST Letters benchmark and about 80% of the letters in 50+ names from 7 pages of the actual logbooks. I presented it at NCUR 2026.',
-      'Afterward I turned it into a web app for an independent study. You drop in a scan and get the top three letters with confidence scores. It has a FastAPI backend and a React front end, checks uploads before sending them, and has tests for the main flows. It runs locally for now.',
+      'Afterward I turned it into a web app for an independent study. You drop in a scan of a letter and get the top three guesses with confidence scores. It has a FastAPI backend and a React front end, with tests for the main flows. The live version runs the model in your browser, and you can try it on letters from the logbooks.',
     ],
     built: 'Python, PyTorch, OpenCV, FastAPI and React',
-    links: [{ label: 'NCUR slides', href: `${GH}/handwriting-recognition/blob/main/docs/NCUR_2026_presentation.pdf`, primary: true }, { label: 'Code', href: `${GH}/handwriting-recognition` }],
+    links: [{ label: 'Try the app', href: 'https://hannaberhanne.github.io/handwriting/', primary: true }, { label: 'NCUR slides', href: `${GH}/handwriting-recognition/blob/main/docs/NCUR_2026_presentation.pdf` }, { label: 'Code', href: `${GH}/handwriting-recognition` }],
   },
   {
     id: 'grammar', area: 'research', name: 'Grammar-Free AI', pad: [0, 35], tag: [0, 4.8, 41],
