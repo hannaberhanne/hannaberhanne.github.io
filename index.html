@@ -1023,7 +1023,7 @@ async function buildWorld() {
       box(horiz ? len : 0.24, 0.12, horiz ? 0.24 : len, M.rail, cx, 0.82, cz); box(horiz ? len : 0.2, 0.1, horiz ? 0.2 : len, M.rail, cx, 0.05, cz);
       solid(horiz ? len : 0.5, 2, horiz ? 0.5 : len, cx, 1, cz); };
     const e = 0.45;
-    edge(-LX + e, -LZ + e, LX - e, -LZ + e); edge(-LX + e, LZ - e, LX - e, LZ - e); edge(-LX + e, -LZ + e, -LX + e, LZ - e);
+    edge(-LX + e, -LZ + e, LX - e, -LZ + e); edge(-LX + e, LZ - e, 30.5, LZ - e); edge(39.5, LZ - e, LX - e, LZ - e); edge(-LX + e, -LZ + e, -LX + e, LZ - e);
     edge(LX - e, -LZ + e, LX - e, -34.6); edge(LX - e, -25.4, LX - e, LZ - e);
     const im = new THREE.InstancedMesh(balGeo, M.rail, pos.length); const o = new THREE.Object3D();
     pos.forEach(([x, z], i) => { o.position.set(x, 0, z); o.updateMatrix(); im.setMatrixAt(i, o.matrix); });
@@ -1085,7 +1085,7 @@ async function buildWorld() {
   const palmKinds = [palmGeometry(), palmGeometry(), palmGeometry()];
   const exclusions = [];
   STOPS.forEach(s => { exclusions.push([s.pad[0], s.pad[1], 9]); exclusions.push([s.tag[0], s.tag[2], 7]); exclusions.push([(s.pad[0] + s.tag[0]) / 2 - 3, (s.pad[1] + s.tag[2]) / 2 + 4, 6]); });
-  exclusions.push([0, 6, 10], [-14, 20, 6], [-18, -8, 3], [-12, -8, 3], [6.5, 17, 2.5], [-6, 18, 2.5], [9, -6, 2.5], [-34.2, 33.5, 3.5], [47.5, 20.8, 2.5], [49.8, 12.4, 3], [5, 41.5, 2.5], [-5, 41.5, 2.5], [49, 6.5, 6], [-33, -6.8, 4.5], [-34.5, -3.5, 3.5], [-53.2, 13.6, 3.5], [-12, 42.5, 4], [28.5, 8.5, 6], [71.5, -32.6, 2], [12.6, -2.5, 2], [22.6, -2, 2], [12.8, -5, 2]);
+  exclusions.push([0, 6, 10], [-14, 20, 6], [-18, -8, 3], [-12, -8, 3], [6.5, 17, 2.5], [-6, 18, 2.5], [9, -6, 2.5], [-34.2, 33.5, 3.5], [47.5, 20.8, 2.5], [49.8, 12.4, 3], [5, 41.5, 2.5], [-5, 41.5, 2.5], [49, 6.5, 6], [-33, -6.8, 4.5], [-34.5, -3.5, 3.5], [-53.2, 13.6, 3.5], [35, 42.5, 5.5], [-12, 42.5, 4], [28.5, 8.5, 6], [71.5, -32.6, 2], [12.6, -2.5, 2], [22.6, -2, 2], [12.8, -5, 2]);
   function free(x, z, roadGap = 3.6) {
     if (Math.abs(x) > LX - 2.5 || Math.abs(z) > LZ - 2.5) return false;
     if (z < -28.5 && Math.abs(x) < 25) return false;
@@ -1111,6 +1111,52 @@ async function buildWorld() {
     im.castShadow = true; im.receiveShadow = true; scene.add(im);
   });
   keptPalms.forEach(([x, z]) => solid(0.6, 4, 0.6, x, 2, z));
+
+  // ---------- beach, through a gap in the south railing ----------
+  { const sand = lam(0xecd7a6), wet = lam(0xd8bd85);
+    // flat sand with a soft slope into the water all round
+    const sh = new THREE.Shape(), x0 = 24, x1 = 54, z0 = 45.6, z1 = 56, r = 3;
+    sh.moveTo(x0 + r, -z0); sh.lineTo(x1 - r, -z0); sh.quadraticCurveTo(x1, -z0, x1, -z0 - r); sh.lineTo(x1, -z1 + r); sh.quadraticCurveTo(x1, -z1, x1 - r, -z1);
+    sh.lineTo(x0 + r, -z1); sh.quadraticCurveTo(x0, -z1, x0, -z1 + r); sh.lineTo(x0, -z0 - r); sh.quadraticCurveTo(x0, -z0, x0 + r, -z0);
+    const g = new THREE.ExtrudeGeometry(sh, { depth: 0.2, bevelEnabled: true, bevelThickness: 0.95, bevelSize: 3.6, bevelSegments: 5, curveSegments: 8 });
+    g.rotateX(-Math.PI / 2); g.translate(0, -1.15 + 0.02, 0);
+    const beachMesh = new THREE.Mesh(g, sand); beachMesh.receiveShadow = true; scene.add(beachMesh);
+    // a darker strip of wet sand along the waterline
+    const wg = new THREE.ExtrudeGeometry(sh, { depth: 0.05, bevelEnabled: true, bevelThickness: 0.9, bevelSize: 4.4, bevelSegments: 3, curveSegments: 8 });
+    wg.rotateX(-Math.PI / 2); wg.translate(0, -1.32, 0);
+    const wetMesh = new THREE.Mesh(wg, wet); wetMesh.receiveShadow = true; scene.add(wetMesh);
+    // boardwalk over the gap in the railing
+    const walk = new THREE.Mesh(new THREE.BoxGeometry(8.6, 0.12, 4.2), [M.wood, M.wood, lam(0xffffff, { map: deckTex }), M.wood, M.wood, M.wood]);
+    walk.position.set(35, 0.06, 45.9); shadowy(walk); scene.add(walk);
+    // keep the cart on the sand
+    solid(31, 2, 0.6, 39, 1, 56.5); solid(0.6, 2, 11, 23.6, 1, 51); solid(0.6, 2, 11, 54.4, 1, 51);
+    // umbrellas with towels
+    const stripes = (a, b) => canvasTex(256, 64, (c, W, H) => { for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? b : a; c.fillRect(i * W / 8, 0, W / 8 + 1, H); } });
+    const umbrella = (x, z, a, b, towel, tilt) => {
+      const u = new THREE.Group(); u.position.set(x, 0, z); u.rotation.z = tilt; scene.add(u);
+      mesh(new THREE.CylinderGeometry(0.05, 0.05, 2.7, 6), M.cream, 0, 1.35, 0, u);
+      const cm = new THREE.MeshLambertMaterial({ map: stripes(a, b), side: THREE.DoubleSide }); cm.userData.day = new THREE.Color(0xffffff); tinted.push(cm);
+      mesh(new THREE.ConeGeometry(1.7, 0.7, 16, 1, true), cm, 0, 2.75, 0, u);
+      mesh(new THREE.IcosahedronGeometry(0.08, 0), M.cream, 0, 3.12, 0, u);
+      box(1.1, 0.03, 2.1, lam(towel), x + 1.5, 0.03, z + 0.6).rotation.y = 0.25;
+      solid(0.3, 3, 0.3, x, 1.5, z);
+    };
+    umbrella(29, 49.5, '#c8392b', '#ffffff', 0x2a93b5, 0.08);
+    umbrella(39.5, 51.5, '#2a93b5', '#ffffff', 0xd6a42b, -0.06);
+    umbrella(49, 49, '#d6a42b', '#ffffff', 0xcf5f90, 0.05);
+    // a sandcastle
+    { const c = new THREE.Group(); c.position.set(43.5, 0, 48.2); c.rotation.y = 0.4; scene.add(c);
+      box(1.6, 0.5, 1.6, sand, 0, 0.25, 0, c);
+      for (const [dx, dz] of [[-0.7, -0.7], [0.7, -0.7], [-0.7, 0.7], [0.7, 0.7]]) { mesh(new THREE.CylinderGeometry(0.24, 0.28, 0.9, 8), sand, dx, 0.45, dz, c); mesh(new THREE.ConeGeometry(0.28, 0.4, 8), wet, dx, 1.1, dz, c); }
+      mesh(new THREE.CylinderGeometry(0.34, 0.4, 1.1, 8), sand, 0, 0.8, 0, c); mesh(new THREE.ConeGeometry(0.38, 0.55, 8), wet, 0, 1.62, 0, c);
+      solid(1.9, 1.5, 1.9, 43.5, 0.75, 48.2, 0.4);
+    }
+    // a few palms on the sand
+    const spots = [[25.8, 47.4], [52.6, 47.6], [27.5, 54.6]];
+    const im = new THREE.InstancedMesh(palmKinds[1].geo, M.palm, spots.length); const o = new THREE.Object3D();
+    spots.forEach(([x, z], i) => { o.position.set(x, 0, z); o.rotation.set(0, i * 2.1, 0); o.scale.setScalar(0.85); o.updateMatrix(); im.setMatrixAt(i, o.matrix); solid(0.6, 4, 0.6, x, 2, z); });
+    im.castShadow = true; scene.add(im);
+  }
 
   { const g = new THREE.IcosahedronGeometry(1, 1); g.scale(1, 0.7, 1); g.translate(0, 0.45, 0);
     const cols = [0x4d9a4f, 0x5aa85a, 0x438c47]; const geos = cols.map(c => paint(prep(g.clone()), c));
@@ -1278,7 +1324,7 @@ async function buildWorld() {
   { const ballTex = canvasTex(256, 128, (c, W, H) => { const cols = ['#ffffff', '#c8392b', '#ffffff', '#e1b443', '#ffffff', '#2a93b5']; cols.forEach((col, i) => { c.fillStyle = col; c.fillRect(i * W / 6, 0, W / 6 + 1, H); }); });
     const ballMat = faceMat(ballTex); const ballCM = new CANNON.Material('ball');
     physics.addContactMaterial(new CANNON.ContactMaterial(ballCM, physics.defaultMaterial, { friction: 0.3, restitution: 0.65 }));
-    for (const [x, z] of [[6.5, 17], [-6, 18], [9, -6]]) { const m = mesh(new THREE.SphereGeometry(0.6, 14, 10), ballMat); const b = new CANNON.Body({ mass: 0.4, material: ballCM, linearDamping: 0.2, angularDamping: 0.2 }); b.addShape(new CANNON.Sphere(0.6)); b.position.set(x, 0.6, z); prop(m, b); }
+    for (const [x, z] of [[6.5, 17], [-6, 18], [9, -6], [31, 52.5], [45.5, 54]]) { const m = mesh(new THREE.SphereGeometry(0.6, 14, 10), ballMat); const b = new CANNON.Body({ mass: 0.4, material: ballCM, linearDamping: 0.2, angularDamping: 0.2 }); b.addShape(new CANNON.Sphere(0.6)); b.position.set(x, 0.6, z); prop(m, b); }
   }
 
   // Handwriting Recognition: the logbook page on an easel, the app on a laptop beside it, letter blocks to the side
