@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280, height=720">
+    <title>በስራና በቤተሰብ መካከል - The Deadline</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&family=Noto+Serif+Ethiopic:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="gebena-icon">
+                <svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Traditional Gebena (Coffee Pot) -->
+                    <path d="M50 10 Q45 15 45 25 L45 40 Q40 45 40 55 L40 95 Q40 110 50 115 Q60 110 60 95 L60 55 Q60 45 55 40 L55 25 Q55 15 50 10 Z" 
+                          fill="#D4A574" stroke="#8B7355" stroke-width="2"/>
+                    <!-- Handle -->
+                    <path d="M60 60 Q70 60 75 65 Q70 70 60 70" 
+                          fill="none" stroke="#8B7355" stroke-width="2.5" stroke-linecap="round"/>
+                    <!-- Spout -->
+                    <path d="M40 65 Q30 65 25 68" 
+                          fill="none" stroke="#8B7355" stroke-width="2.5" stroke-linecap="round"/>
+                    <!-- Lid -->
+                    <ellipse cx="50" cy="25" rx="8" ry="4" fill="#8B7355"/>
+                    <!-- Decorative lines -->
+                    <line x1="42" y1="50" x2="58" y2="50" stroke="#8B7355" stroke-width="1.5"/>
+                    <line x1="42" y1="70" x2="58" y2="70" stroke="#8B7355" stroke-width="1.5"/>
+                    <line x1="42" y1="85" x2="58" y2="85" stroke="#8B7355" stroke-width="1.5"/>
+                </svg>
+            </div>
+            
+            <h2 class="preloader-title">በስራና በቤተሰብ መካከል</h2>
+            <p class="preloader-subtitle">The Deadline</p>
+            
+            <div class="loading-bar-container">
+                <div class="loading-bar">
+                    <div class="loading-fill"></div>
+                </div>
+                <p class="loading-text">Preparing your journey...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN STAGE -->
+    <div id="stage" data-state="idle">
+        
+        <audio id="bg-audio" loop>
+            <source src="assets/audio-background.mp3" type="audio/mpeg">
+        </audio>
+        
+        <button id="sound-toggle" aria-label="Toggle Audio">
+            <span class="sound-off">🔇</span>
+            <span class="sound-on" style="display: none;">🔊</span>
+        </button>
+
+        <div id="chapter-indicator"></div>
+
+        <div class="story-zone z-work" data-chapter="1"></div>
+        <div class="story-zone z-crisis" data-chapter="2"></div>
+        <div class="story-zone z-connect" data-chapter="3"></div>
+        <div class="story-zone z-balance" data-chapter="4"></div>
+        
+        <div id="error-message"></div>
+
+        <div id="video-layer">
+            <video id="coffee-video" autoplay loop muted playsinline>
+                <source src="assets/coffee.mp4" type="video/mp4">
+            </video>
+            <div class="vignette"></div>
+        </div>
+
+        <div id="content-layer">
+            
+            <div class="memory-panel p1 ch1" style="background-image: url('assets/actualpanel1.jpg');">
+                <div class="caption">The Focus</div>
+            </div>
+            <div class="memory-panel p2 ch1" style="background-image: url('assets/actualpanel2.jpg');">
+                <div class="caption">The Interrupt</div>
+            </div>
+
+            <div class="memory-panel p3 ch2" style="background-image: url('assets/actualpanel3.jpg');">
+                <div class="caption">The Fracture</div>
+            </div>
+            <div class="memory-panel p4 ch2" style="background-image: url('assets/actualpanel4.jpg');">
+                <div class="caption">The Weight</div>
+            </div>
+            <div class="memory-panel p5 ch2" style="background-image: url('assets/actualpanel5.jpg');">
+                <div class="caption">The Spill</div>
+            </div>
+
+            <div class="memory-panel p6 ch3" style="background-image: url('assets/actualpanel6.jpg');">
+                <div class="caption">The Ancestors</div>
+            </div>
+            <div class="memory-panel p7 ch3" style="background-image: url('assets/actualpanel7.jpg');">
+                <div class="caption">The Pieces</div>
+            </div>
+
+            <div class="memory-panel p8 ch4" style="background-image: url('assets/actualpanel8.jpg');">
+                <div class="caption">The Repair (Kintsugi)</div>
+            </div>
+            <div class="memory-panel p9 ch4" style="background-image: url('assets/actualpanel9.jpg');">
+                <div class="caption">The Bridge</div>
+            </div>
+            <div class="memory-panel p10 ch4" style="background-image: url('assets/actualpanel10.jpg');">
+                <div class="caption">The Reflection</div>
+            </div>
+
+        </div>
+
+        <div id="title-overlay">
+            <h1 class="ch-title">በስራና በቤተሰብ መካከል</h1>
+            <p class="ch-subtitle">A journey through tension, identity, and balance</p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,569 @@
+:root {
+    --gold: #D4A574;
+    --red: #DA121A;
+    --blue: #4189DD;
+    --green: #009639;
+    --dark: #0a0a0a;
+    --eritrea-green: #12AD2B;
+    --eritrea-blue: #4189DD;
+    --eritrea-red: #DA121A;
+    --eritrea-gold: #FFC845;
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}
+
+/* ========== PRELOADER ========== */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1410 100%);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease;
+}
+
+.preloader-content {
+    text-align: center;
+    max-width: 600px;
+}
+
+.gebena-icon {
+    width: 120px;
+    height: 140px;
+    margin: 0 auto 40px;
+    animation: gentleFloat 3s ease-in-out infinite;
+}
+
+.gebena-icon svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 10px 25px rgba(212, 165, 116, 0.4));
+}
+
+.preloader-title {
+    font-family: 'Noto Serif Ethiopic', serif;
+    font-size: 42px;
+    color: var(--gold);
+    margin-bottom: 12px;
+    text-shadow: 0 4px 15px rgba(212, 165, 116, 0.5);
+    letter-spacing: 1px;
+}
+
+.preloader-subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 50px;
+    font-weight: 300;
+}
+
+.loading-bar-container {
+    margin-top: 40px;
+}
+
+.loading-bar {
+    width: 400px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.loading-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, 
+        var(--eritrea-green) 0%, 
+        var(--eritrea-blue) 33%, 
+        var(--eritrea-red) 66%, 
+        var(--eritrea-gold) 100%
+    );
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 15px rgba(212, 165, 116, 0.6);
+    animation: shimmer 2s infinite;
+}
+
+.loading-text {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 300;
+}
+
+@keyframes gentleFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes shimmer {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* ========== MAIN STAGE ========== */
+#stage {
+    width: 1280px;
+    height: 720px;
+    position: relative;
+    overflow: hidden;
+    background: var(--dark);
+    transition: all 0.5s ease;
+}
+
+/* ========== STORY ZONES ========== */
+.story-zone {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    z-index: 100;
+    cursor: pointer;
+    background: transparent;
+    transition: box-shadow 0.5s ease;
+}
+
+/* SIBLING CONTROL (~) - REQUIRED BY ASSIGNMENT */
+/* When hovering a zone, dim the video layer */
+.z-work:hover ~ #video-layer #coffee-video { 
+    filter: sepia(0.1) hue-rotate(200deg) brightness(0.4) contrast(1.4) !important;
+}
+
+.z-crisis:hover ~ #video-layer #coffee-video { 
+    filter: contrast(2.2) hue-rotate(340deg) brightness(0.5) saturate(1.5) !important;
+}
+
+.z-connect:hover ~ #video-layer #coffee-video { 
+    filter: sepia(1) brightness(1.4) contrast(1.2) !important;
+}
+
+.z-balance:hover ~ #video-layer #coffee-video { 
+    filter: sepia(0.1) hue-rotate(120deg) brightness(0.5) saturate(1.1) !important;
+}
+
+/* Dim title overlay when hovering zones */
+.z-work:hover ~ #title-overlay,
+.z-crisis:hover ~ #title-overlay,
+.z-connect:hover ~ #title-overlay,
+.z-balance:hover ~ #title-overlay { 
+    opacity: 0.05 !important;
+}
+
+.z-work { 
+    width: 30%; 
+    height: 100%; 
+    left: 0;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="%234189DD" opacity="0.7"/><text x="12" y="17" font-size="12" text-anchor="middle" fill="white">📚</text></svg>') 12 12, pointer;
+}
+
+.z-crisis { 
+    left: 30%; 
+    width: 40%; 
+    height: 60%;
+    top: 0;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="%23DA121A" opacity="0.7"/><text x="12" y="17" font-size="12" text-anchor="middle" fill="white">⚡</text></svg>') 12 12, pointer;
+}
+
+.z-connect { 
+    left: 70%; 
+    width: 30%; 
+    height: 100%; 
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="%23D4A574" opacity="0.7"/><text x="12" y="17" font-size="12" text-anchor="middle" fill="white">☕</text></svg>') 12 12, pointer;
+}
+
+.z-balance { 
+    top: 60%; 
+    left: 0;
+    width: 100%; 
+    height: 40%; 
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="%23009639" opacity="0.7"/><text x="12" y="17" font-size="12" text-anchor="middle" fill="white">⚖️</text></svg>') 12 12, pointer;
+}
+
+/* ========== VIDEO ========== */
+#video-layer {
+    position: absolute; 
+    width: 100%; 
+    height: 100%;
+    z-index: 10;
+}
+
+#coffee-video {
+    width: 100%; 
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.65;
+    filter: sepia(0.3) contrast(1.15);
+    transition: filter 1s ease, opacity 1s ease;
+}
+
+#stage[data-state="idle"] #coffee-video {
+    filter: blur(2px) sepia(0.5);
+}
+
+#stage[data-state="ch1"] #coffee-video { 
+    filter: sepia(0.1) hue-rotate(200deg) brightness(0.55) contrast(1.2); 
+}
+
+#stage[data-state="ch2"] #coffee-video { 
+    filter: contrast(1.9) hue-rotate(340deg) brightness(0.65) saturate(1.3); 
+}
+
+#stage[data-state="ch3"] #coffee-video { 
+    filter: sepia(0.85) brightness(1.25) contrast(1.1); 
+}
+
+#stage[data-state="ch4"] #coffee-video { 
+    filter: sepia(0.1) hue-rotate(120deg) brightness(0.65) saturate(0.9); 
+}
+
+/* ========== MEMORY PANELS ========== */
+#content-layer {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    z-index: 20;
+}
+
+.memory-panel {
+    position: absolute;
+    width: 400px; 
+    height: 225px;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: all 0.85s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform: scale(0.88) rotate(5deg);
+    mix-blend-mode: screen;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    border: 2px solid rgba(212, 165, 116, 0.25);
+    border-radius: 4px;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.memory-panel:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(5deg) scale(1.08) !important;
+    box-shadow: 0 20px 60px rgba(212, 165, 116, 0.6);
+    z-index: 25;
+    border-color: rgba(212, 165, 116, 0.8);
+    filter: brightness(1.1) contrast(1.1);
+}
+
+/* ========== PANEL POSITIONS ========== */
+/* Chapter 1: Left side */
+.p1 { 
+    top: 8%; 
+    left: 3%; 
+    transform: scale(0.88) rotate(-4deg);
+}
+
+.p2 { 
+    top: 48%; 
+    left: 5%; 
+    transform: scale(0.88) rotate(5deg);
+}
+
+/* Chapter 2: Center area */
+.p3 { 
+    top: 2%; 
+    left: 32%; 
+    transform: scale(0.88) rotate(-9deg);
+}
+
+.p4 { 
+    top: 3%; 
+    right: 2%;
+    transform: scale(0.88) rotate(7deg);
+}
+
+.p5 { 
+    top: 38%; 
+    left: 50%; 
+    transform: translate(-50%, -50%) scale(0.88) rotate(-3deg);
+    width: 500px; 
+    height: 280px;
+}
+
+/* Chapter 3: Right side */
+.p6 { 
+    top: 10%; 
+    right: 4%; 
+    transform: scale(0.88) rotate(-6deg);
+}
+
+.p7 { 
+    top: 48%; 
+    right: 6%; 
+    transform: scale(0.88) rotate(4deg);
+}
+
+/* Chapter 4: Bottom row - evenly spaced */
+.p8 { 
+    bottom: 5%; 
+    left: 2%; 
+    transform: scale(0.88) rotate(-3deg);
+    top: auto;
+}
+
+.p9 { 
+    bottom: 8%; 
+    left: 36%; 
+    transform: scale(0.88) rotate(2deg);
+    top: auto;
+}
+
+.p10 { 
+    bottom: 5%; 
+    left: 69%; 
+    transform: scale(0.88) rotate(-4deg);
+    top: auto;
+}
+
+/* ========== CHAPTER REVEALS ========== */
+#stage[data-state="ch1"] .ch1 { 
+    opacity: 1; 
+    transform: scale(1) rotate(0); 
+}
+
+#stage[data-state="ch2"] .ch2 { 
+    opacity: 1; 
+    transform: scale(1); 
+}
+
+#stage[data-state="ch2"] .p5 {
+    animation: subtleShake 0.5s infinite alternate; 
+}
+
+#stage[data-state="ch3"] .ch3 { 
+    opacity: 1; 
+    transform: scale(1.08); 
+}
+
+#stage[data-state="ch4"] .ch4 { 
+    opacity: 1; 
+    transform: scale(1) rotate(0); 
+}
+
+/* ========== TEXT ELEMENTS ========== */
+.caption {
+    position: absolute;
+    bottom: 10px; 
+    right: 10px;
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 9px;
+    background: rgba(0, 0, 0, 0.92);
+    border-radius: 3px;
+    mix-blend-mode: normal;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.9);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+#chapter-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 150;
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--gold);
+    padding: 15px 30px;
+    border-radius: 8px;
+    border: 2px solid var(--gold);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+}
+
+#title-overlay {
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+    text-align: center;
+    transition: opacity 0.3s ease;
+    background: rgba(0, 0, 0, 0.93);
+    padding: 45px 75px;
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    box-shadow: 0 10px 60px rgba(0,0,0,0.95);
+    pointer-events: none;
+    max-width: 850px;
+}
+
+.ch-title { 
+    color: var(--gold); 
+    font-family: 'Noto Serif Ethiopic', serif; 
+    font-size: 52px; 
+    margin-bottom: 12px;
+    text-shadow: 0 3px 12px rgba(0,0,0,0.9);
+    line-height: 1.2;
+}
+
+.ch-subtitle { 
+    color: #fff; 
+    opacity: 0.95; 
+    letter-spacing: 2.5px; 
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+/* ========== UI CONTROLS ========== */
+#sound-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 150;
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 22px;
+    transition: all 0.3s ease;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#sound-toggle:hover {
+    background: rgba(212, 165, 116, 0.25);
+    transform: scale(1.12);
+    box-shadow: 0 0 25px rgba(212, 165, 116, 0.4);
+}
+
+/* Progress dots in top-left */
+#stage::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 120px;
+    height: 12px;
+    background: linear-gradient(90deg, 
+        var(--blue) 0%, var(--blue) 25%,
+        transparent 25%, transparent 25.5%,
+        var(--red) 25.5%, var(--red) 50%,
+        transparent 50%, transparent 50.5%,
+        var(--gold) 50.5%, var(--gold) 75%,
+        transparent 75%, transparent 75.5%,
+        var(--green) 75.5%, var(--green) 100%
+    );
+    border-radius: 6px;
+    opacity: 0.3;
+    z-index: 150;
+    transition: opacity 0.3s ease;
+}
+
+#stage[data-state="ch1"]::before,
+#stage[data-state="ch2"]::before,
+#stage[data-state="ch3"]::before,
+#stage[data-state="ch4"]::before {
+    opacity: 0.7;
+}
+
+#error-message {
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 250;
+    color: var(--red);
+    background: rgba(0, 0, 0, 0.96);
+    padding: 22px 40px;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    box-shadow: 0 0 40px var(--red);
+    border: 2px solid var(--red);
+    text-align: center;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes subtleShake {
+    0%, 100% { transform: translate(1px, -1px) scale(1); }
+    50% { transform: translate(-1px, 1px) scale(1); }
+}
+
+@keyframes pulse {
+    from { 
+        box-shadow: inset 0 0 0px var(--gold); 
+        opacity: 0.65; 
+    }
+    to { 
+        box-shadow: inset 0 0 45px var(--gold); 
+        opacity: 1; 
+    }
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+@keyframes drift {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    50% { transform: translateX(10px) rotate(2deg); }
+}
+
+@keyframes glitch {
+    0%, 100% { transform: translate(0, 0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    60% { transform: translate(-2px, -2px); }
+    80% { transform: translate(2px, 2px); }
+}
+
+.ch1:hover { animation: drift 3s ease-in-out infinite; }
+.ch2:hover { animation: glitch 0.3s ease-in-out infinite; }
+.ch3:hover { animation: breathe 2s ease-in-out infinite; }
+
+.vignette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 130px rgba(0,0,0,0.65);
+    pointer-events: none;
+}
