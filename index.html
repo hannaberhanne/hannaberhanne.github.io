@@ -122,6 +122,8 @@ button { cursor: pointer; }
 #menu button { display: flex; width: 100%; align-items: center; gap: 10px; border: 0; background: none; text-align: left; padding: 9px 10px; border-radius: 10px; font-size: 15px; }
 #menu button:hover, #menu button:focus-visible { background: var(--surface-2); }
 #menu button::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--area); flex: none; }
+#menu .start { padding-bottom: 6px; margin-bottom: 2px; border-bottom: 1px solid var(--line); }
+#menu .start h3 { color: var(--ink); }
 
 #auto {
   position: absolute; z-index: 6; top: calc(68px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%);
@@ -211,6 +213,9 @@ kbd { font-family: var(--f-mono); font-size: 12px; background: var(--surface-2);
 .intro-box h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(48px, 9vw, 104px); line-height: 0.92; letter-spacing: -0.035em; margin: 0 0 18px; }
 .intro-box p { font-size: 18px; max-width: 34em; margin: 0 0 8px; }
 .intro-box p.sub { color: var(--muted); font-size: 16px; }
+.start a { text-decoration: underline; text-decoration-color: var(--brick); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.start a:hover { text-decoration-color: currentColor; }
+.intro-box p.start { font-size: 16px; margin-top: 12px; }
 .intro-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
 .btn { display: inline-flex; align-items: center; text-decoration: none; font-family: var(--f-display); font-weight: 600; font-size: 16px; padding: 12px 18px; border-radius: 8px; border: 1.5px solid var(--area); color: var(--ink); background: transparent; }
 .btn.primary { background: var(--area); color: var(--on-accent); }
@@ -234,6 +239,9 @@ kbd { font-family: var(--f-mono); font-size: 12px; background: var(--surface-2);
 .plain-head .copy p { font-size: 18.5px; line-height: 1.55; }
 .plain-head .links { margin: 18px 0 24px; }
 .plain-head .fact { margin: 0 0 6px; font-size: 15px; color: var(--muted); }
+.plain-head p.start { font-size: 17px; margin: 14px 0 0; }
+.entry { scroll-margin-top: 64px; }
+.entry h3:focus { outline: none; }
 .plain-sec { margin-top: 84px; }
 .plain-sec > h2 { font-family: var(--f-display); font-weight: 800; font-size: 34px; letter-spacing: -0.02em; color: var(--area); margin: 0 0 6px; }
 .entry { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 0 48px; padding: 26px 0 6px; }
@@ -324,6 +332,7 @@ kbd { font-family: var(--f-mono); font-size: 12px; background: var(--surface-2);
     <div class="intro-box">
       <h1 id="intro-name">Hanna<br>Berhane</h1>
       <p>I study computer science at the University of Tampa and work the service desk at Grant Thornton. Most of my projects started as a problem at work or in class.</p>
+      <p class="start">Short on time? Start with the <a href="#p-shift" data-start="shift">Performance Model</a>, <a href="#p-catalyst" data-start="catalyst">Catalyst</a> or <a href="#p-glide" data-start="glide">Glide+</a>.</p>
       <div class="intro-actions">
         <button class="btn primary" id="btn-start" disabled>Loading campus…</button>
         <button class="btn" id="btn-plain-2">Read the plain version</button>
@@ -362,7 +371,7 @@ const CONTACT = {
   email: 'hannaberhanne@gmail.com',
   github: 'https://github.com/hannaberhanne',
   linkedin: 'https://www.linkedin.com/in/hanna-berhane',
-  resume: null, // set to 'resume.pdf' once the public copy is ready
+  resume: 'https://hannaberhanne.github.io/files/hanna-berhane-resume.pdf',
 };
 const GH = CONTACT.github;
 
@@ -386,6 +395,7 @@ const STOPS = [
     facts: [
       ['Education', 'B.S. in Computer Science, minor in Business Administration, University of Tampa'],
       ['Tools', 'Python, SQL, JavaScript, TypeScript, React, Node.js, Java, PyTorch, scikit-learn, pandas, ServiceNow, Jira and Figma'],
+      ['Looking for', 'Full-time roles in New York, DC or remote. Open to relocating.'],
     ],
   },
   {
@@ -430,7 +440,7 @@ const STOPS = [
     text: [
       "Catalyst flags IT tickets that are likely to breach their SLA while there's still time to do something about it. I built it for the University of Tampa service desk.",
       "I defined a breach as a ticket open more than 14 days. That's 597 of the 11,561 tickets closed in 2023, about 5%. The model only sees things known early on: how long the first response took, whether the ticket came in on a weekend, which team queue it landed in, and how many times it changed teams.",
-      "It's a calibrated random forest with the threshold set to catch at least 60% of breaches on held-out tickets, at 0.90 accuracy. SHAP showed the biggest drivers were the team queue, a slow first response, and reassignments.",
+      "It's a calibrated random forest with the threshold set to catch at least 60% of breaches on held-out tickets. SHAP showed the biggest drivers were the team queue, a slow first response, and reassignments.",
     ],
     note: 'The ticket data stays with UT ITS. The repo runs on synthetic tickets.',
     built: 'Python, pandas, scikit-learn and SHAP',
@@ -441,10 +451,10 @@ const STOPS = [
     title: 'Performance Model',
     ctx: 'UT ITS student service desk, spring 2026',
     text: [
-      "As a student supervisor I had to review 15 technicians who all worked different shifts. Someone on weekday afternoons with three teammates touches more tickets per hour than someone covering nights alone, so raw counts weren't fair. I built this on my own to fix that.",
+      "As a student supervisor I had to review the 15 technicians in our spring 2026 check-ins, and they all worked different shifts. Someone on weekday afternoons with three teammates touches more tickets per hour than someone covering nights alone, so raw counts weren't fair. I built this on my own to fix that.",
       'It starts with the ticket audit logs. Every action gets tagged by a written rule, like a valid follow-up, a correct reroute or a category fix, and every finding points back to an incident number. Each action is then matched to the shift schedule, so it knows who was working, who they were working with, whether it was a night, weekend or solo shift, and how slow the ticket was.',
       "Then it scores each person three ways: against the strongest profile on the team, on a weighted 0 to 100 scorecard, and as z-scores that account for harder shifts. People with thin data get a low-confidence flag instead of a low score, and a separate rubric covers what tickets can't show, like phones and reliability.",
-      'I used it for the spring 2026 check-ins, covering 1,800+ ticket updates, and wrote each review from it. I presented it to management and it became the standard way the team is evaluated.',
+      'I wrote each of those reviews from it, covering 1,800+ ticket updates. I presented it to management and it became the standard way the team is evaluated.',
     ],
     note: 'Staff data stays with UT ITS. The public repo runs the whole thing on 15 made-up technicians.',
     built: 'Python, openpyxl and Excel',
@@ -543,7 +553,7 @@ const STOPS = [
     text: [
       "This reads handwritten town names in historical records held by Ghana's National House of Chiefs. It was my SURF research project. The records came from Dr. Kevin Fridy, and Dr. Matthew Lepinski was my mentor.",
       'The pipeline cleans the scan, finds the boxes with names in them, splits out the letters, classifies each one with a CNN, and then matches the word against a list of Ghanaian town names. I tested four ways of cleaning the scans, and morphological subtraction did the best job of keeping the handwriting while removing the background.',
-      'The models reached 93% on the EMNIST Letters benchmark and about 80% on 50+ names from 7 pages of the actual logbooks. I presented it at NCUR 2026.',
+      'The models reached 93% on the EMNIST Letters benchmark and about 80% of the letters in 50+ names from 7 pages of the actual logbooks. I presented it at NCUR 2026.',
       'Afterward I turned it into a web app for an independent study. You drop in a scan and get the top three letters with confidence scores. It has a FastAPI backend and a React front end, checks uploads before sending them, and has tests for the main flows. It runs locally for now.',
     ],
     built: 'Python, PyTorch, OpenCV, FastAPI and React',
@@ -585,7 +595,7 @@ const STOPS = [
   {
     id: 'contact', area: 'about', name: 'Contact', pad: [67, -30], tag: [70.5, 3.4, -32.5],
     title: 'Get in touch',
-    text: ['Email is the fastest way to reach me.'],
+    text: ["I'm looking for full-time roles in New York, DC or remote, and I'm open to relocating. Email is the fastest way to reach me."],
     contact: true,
   },
 ];
@@ -598,6 +608,9 @@ const GROUPS = [
   ['design', ['edutech', 'deadline', 'design']],
   ['course', ['hannabot', 'pagerank']],
 ];
+// The three projects to look at first, for someone short on time.
+const START = ['shift', 'catalyst', 'glide'];
+const START_LINE = 'Short on time? Start with the <a href="#p-shift" data-start="shift">Performance Model</a>, <a href="#p-catalyst" data-start="catalyst">Catalyst</a> or <a href="#p-glide" data-start="glide">Glide+</a>.';
 
 /* =====================================================================
    UI: cards, menu, plain version
@@ -691,7 +704,8 @@ function closeCard(byUser = false) {
 
 // ---- menu ----
 const menu = $('#menu'), btnMenu = $('#btn-menu');
-menu.innerHTML = GROUPS.map(([a, ids]) =>
+menu.innerHTML = `<div class="start"><h3>Start here</h3>${START.map(id => `<button type="button" data-go="${id}" data-area="${byId[id].area}">${esc(byId[id].name)}</button>`).join('')}</div>` +
+  GROUPS.map(([a, ids]) =>
   `<div data-area="${a}"><h3>${AREAS[a].name}</h3>${ids.map(id => `<button type="button" data-go="${id}">${esc(byId[id].name)}</button>`).join('')}</div>`).join('');
 function toggleMenu(force) {
   const open = force ?? menu.hidden;
@@ -726,6 +740,7 @@ function renderPlain(note) {
     <header class="plain-head" data-area="about">
       <h1>Hanna Berhane</h1>
       <div class="copy">${about.text.map(p => `<p>${esc(p)}</p>`).join('')}</div>
+      <p class="start">${START_LINE}</p>
       ${linkRow([{ label: 'LinkedIn', href: CONTACT.linkedin, primary: true }, { label: 'GitHub', href: CONTACT.github }, ...(CONTACT.resume ? [{ label: 'Resume (PDF)', href: CONTACT.resume }] : []), { label: 'Email', href: `mailto:${CONTACT.email}` }])}
       ${about.facts.map(([k, v]) => `<p class="fact"><b>${esc(k)}</b> ${esc(v)}</p>`).join('')}
     </header>
@@ -740,7 +755,7 @@ function renderPlain(note) {
 
     <section class="plain-sec" data-area="about" id="p-contact">
       <h2>Contact</h2>
-      <div class="copy"><p>Email is the fastest way to reach me.</p></div>
+      <div class="copy">${byId.contact.text.map(p => `<p>${esc(p)}</p>`).join('')}</div>
       ${contactBlock('plain')}
     </section>
   </div>`;
@@ -757,7 +772,21 @@ function showPlain(on, note) {
 }
 $('#btn-plain').addEventListener('click', () => showPlain(true));
 $('#btn-plain-2').addEventListener('click', () => showPlain(true));
+function plainTo(id) {
+  showPlain(true);
+  const el = plain.querySelector('#p-' + id);
+  if (!el) return;
+  el.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  el.querySelector('h3')?.setAttribute('tabindex', '-1'); el.querySelector('h3')?.focus({ preventScroll: true });
+}
+// In the plain version the start links scroll to the entry; on the intro they drive there (or open the plain version until the campus loads).
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('[data-start]'); if (!a) return;
+  e.preventDefault();
+  if (!plain.hidden || !ui.goTo) plainTo(a.dataset.start); else ui.goTo(a.dataset.start);
+});
 if (location.hash === '#plain') showPlain(true);
+else if (/^#p-[a-z]+$/.test(location.hash) && byId[location.hash.slice(3)]) plainTo(location.hash.slice(3));
 
 addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
@@ -1114,10 +1143,11 @@ async function buildWorld() {
 
   // ---------- beach, through a gap in the south railing ----------
   { const sand = lam(0xecd7a6), wet = lam(0xd8bd85);
-    // flat sand with a soft slope into the water all round
-    const sh = new THREE.Shape(), x0 = 24, x1 = 54, z0 = 45.6, z1 = 56, r = 3;
-    sh.moveTo(x0 + r, -z0); sh.lineTo(x1 - r, -z0); sh.quadraticCurveTo(x1, -z0, x1, -z0 - r); sh.lineTo(x1, -z1 + r); sh.quadraticCurveTo(x1, -z1, x1 - r, -z1);
-    sh.lineTo(x0 + r, -z1); sh.quadraticCurveTo(x0, -z1, x0, -z1 + r); sh.lineTo(x0, -z0 - r); sh.quadraticCurveTo(x0, -z0, x0 + r, -z0);
+    // a straight edge under the railing and a curved edge on the water, with a soft slope into the water
+    const Z0 = 45.6;
+    const shore = [[55, Z0], [56.6, 50], [54.5, 55.5], [47.5, 60], [37.5, 62.8], [26, 63.6], [14.5, 62], [4, 58.2], [-4.5, 53], [-9.5, 48.2], [-10.5, Z0]];
+    const edgePts = new THREE.CatmullRomCurve3(shore.map(([x, z]) => new THREE.Vector3(x, 0, z)), false, 'centripetal').getSpacedPoints(64);
+    const sh = new THREE.Shape(); sh.moveTo(edgePts[0].x, -edgePts[0].z); edgePts.slice(1).forEach(p => sh.lineTo(p.x, -p.z));
     const g = new THREE.ExtrudeGeometry(sh, { depth: 0.2, bevelEnabled: true, bevelThickness: 0.95, bevelSize: 3.6, bevelSegments: 5, curveSegments: 8 });
     g.rotateX(-Math.PI / 2); g.translate(0, -1.15 + 0.02, 0);
     const beachMesh = new THREE.Mesh(g, sand); beachMesh.receiveShadow = true; scene.add(beachMesh);
@@ -1129,7 +1159,8 @@ async function buildWorld() {
     const walk = new THREE.Mesh(new THREE.BoxGeometry(8.6, 0.12, 4.2), [M.wood, M.wood, lam(0xffffff, { map: deckTex }), M.wood, M.wood, M.wood]);
     walk.position.set(35, 0.06, 45.9); shadowy(walk); scene.add(walk);
     // keep the cart on the sand
-    solid(31, 2, 0.6, 39, 1, 56.5); solid(0.6, 2, 11, 23.6, 1, 51); solid(0.6, 2, 11, 54.4, 1, 51);
+    for (let i = 0; i < edgePts.length - 1; i++) { const p = edgePts[i], q = edgePts[i + 1], dx = q.x - p.x, dz = q.z - p.z;
+      solid(Math.hypot(dx, dz) + 0.3, 2, 0.6, (p.x + q.x) / 2, 1, (p.z + q.z) / 2, Math.atan2(-dz, dx)); }
     // umbrellas with towels
     const stripes = (a, b) => canvasTex(256, 64, (c, W, H) => { for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? b : a; c.fillRect(i * W / 8, 0, W / 8 + 1, H); } });
     const umbrella = (x, z, a, b, towel, tilt) => {
@@ -1141,18 +1172,32 @@ async function buildWorld() {
       box(1.1, 0.03, 2.1, lam(towel), x + 1.5, 0.03, z + 0.6).rotation.y = 0.25;
       solid(0.3, 3, 0.3, x, 1.5, z);
     };
-    umbrella(29, 49.5, '#c8392b', '#ffffff', 0x2a93b5, 0.08);
-    umbrella(39.5, 51.5, '#2a93b5', '#ffffff', 0xd6a42b, -0.06);
-    umbrella(49, 49, '#d6a42b', '#ffffff', 0xcf5f90, 0.05);
+    umbrella(-0.5, 51.5, '#c8392b', '#ffffff', 0x2a93b5, 0.08);
+    umbrella(18.5, 56.5, '#2a93b5', '#ffffff', 0xd6a42b, -0.06);
+    umbrella(44.5, 55, '#d6a42b', '#ffffff', 0xcf5f90, 0.05);
+    umbrella(50.5, 49.2, '#c8392b', '#ffffff', 0x7a63c9, -0.05);
     // a sandcastle
-    { const c = new THREE.Group(); c.position.set(43.5, 0, 48.2); c.rotation.y = 0.4; scene.add(c);
+    { const c = new THREE.Group(); c.position.set(12.5, 0, 52.5); c.rotation.y = 0.4; scene.add(c);
       box(1.6, 0.5, 1.6, sand, 0, 0.25, 0, c);
       for (const [dx, dz] of [[-0.7, -0.7], [0.7, -0.7], [-0.7, 0.7], [0.7, 0.7]]) { mesh(new THREE.CylinderGeometry(0.24, 0.28, 0.9, 8), sand, dx, 0.45, dz, c); mesh(new THREE.ConeGeometry(0.28, 0.4, 8), wet, dx, 1.1, dz, c); }
       mesh(new THREE.CylinderGeometry(0.34, 0.4, 1.1, 8), sand, 0, 0.8, 0, c); mesh(new THREE.ConeGeometry(0.38, 0.55, 8), wet, 0, 1.62, 0, c);
-      solid(1.9, 1.5, 1.9, 43.5, 0.75, 48.2, 0.4);
+      solid(1.9, 1.5, 1.9, 12.5, 0.75, 52.5, 0.4);
     }
-    // a few palms on the sand
-    const spots = [[25.8, 47.4], [52.6, 47.6], [27.5, 54.6]];
+    // a lifeguard stand facing the water
+    { const red = lam(0xc8392b), L = new THREE.Group(); L.position.set(25, 0, 59.6); L.rotation.y = -0.12; scene.add(L);
+      for (const [dx, dz] of [[-0.9, -0.8], [0.9, -0.8], [-0.9, 0.8], [0.9, 0.8]]) box(0.18, 2.3, 0.18, M.cream, dx, 1.15, dz, L);
+      box(2.6, 0.16, 2.4, M.wood, 0, 2.35, 0, L);
+      box(1.9, 1.3, 1.5, red, 0, 3.08, -0.3, L);
+      box(1.3, 0.6, 0.05, M.dark, 0, 3.25, 0.46, L);
+      box(2.3, 0.12, 1.9, M.cream, 0, 3.8, -0.3, L);
+      for (const dx of [-1.25, 1.25]) box(0.08, 0.5, 2.3, M.cream, dx, 2.65, 0, L);
+      const ramp = box(1.1, 0.1, 3.0, M.wood, 0, 1.2, 2.3, L); ramp.rotation.x = 0.8;
+      mesh(new THREE.CylinderGeometry(0.04, 0.04, 2.2, 6), M.cream, 0.95, 4.9, -0.9, L);
+      const flag = box(0.7, 0.42, 0.03, red, 1.32, 5.75, -0.9, L); flag.rotation.y = 0;
+      solid(2.4, 4, 2.2, 25, 2, 59.6, -0.12);
+    }
+    // palms on the sand
+    const spots = [[-6.5, 48.2], [9.8, 58.3], [26.2, 47.7], [52.8, 47.6], [48.6, 57.3]];
     const im = new THREE.InstancedMesh(palmKinds[1].geo, M.palm, spots.length); const o = new THREE.Object3D();
     spots.forEach(([x, z], i) => { o.position.set(x, 0, z); o.rotation.set(0, i * 2.1, 0); o.scale.setScalar(0.85); o.updateMatrix(); im.setMatrixAt(i, o.matrix); solid(0.6, 4, 0.6, x, 2, z); });
     im.castShadow = true; scene.add(im);
@@ -1324,7 +1369,7 @@ async function buildWorld() {
   { const ballTex = canvasTex(256, 128, (c, W, H) => { const cols = ['#ffffff', '#c8392b', '#ffffff', '#e1b443', '#ffffff', '#2a93b5']; cols.forEach((col, i) => { c.fillStyle = col; c.fillRect(i * W / 6, 0, W / 6 + 1, H); }); });
     const ballMat = faceMat(ballTex); const ballCM = new CANNON.Material('ball');
     physics.addContactMaterial(new CANNON.ContactMaterial(ballCM, physics.defaultMaterial, { friction: 0.3, restitution: 0.65 }));
-    for (const [x, z] of [[6.5, 17], [-6, 18], [9, -6], [31, 52.5], [45.5, 54]]) { const m = mesh(new THREE.SphereGeometry(0.6, 14, 10), ballMat); const b = new CANNON.Body({ mass: 0.4, material: ballCM, linearDamping: 0.2, angularDamping: 0.2 }); b.addShape(new CANNON.Sphere(0.6)); b.position.set(x, 0.6, z); prop(m, b); }
+    for (const [x, z] of [[6.5, 17], [-6, 18], [9, -6], [5.5, 54.8], [37.5, 58.5], [49.8, 52.8]]) { const m = mesh(new THREE.SphereGeometry(0.6, 14, 10), ballMat); const b = new CANNON.Body({ mass: 0.4, material: ballCM, linearDamping: 0.2, angularDamping: 0.2 }); b.addShape(new CANNON.Sphere(0.6)); b.position.set(x, 0.6, z); prop(m, b); }
   }
 
   // Handwriting Recognition: the logbook page on an easel, the app on a laptop beside it, letter blocks to the side
@@ -1739,7 +1784,7 @@ async function buildWorld() {
     chassis.quaternion.vmult(new CANNON.Vec3(0, 1, 0), upv);
     if (upv.y < 0.35 && chassis.velocity.length() < 3) flipTimer += dt; else flipTimer = 0;
     if (flipTimer > 1.2) { const yaw = Math.atan2(-fwd.z, fwd.x); place(chassis.position.x, chassis.position.z, yaw); flipTimer = 0; }
-    if (chassis.position.y < -3 || Math.abs(chassis.position.x) > 80 || Math.abs(chassis.position.z) > 60) resetCart();
+    if (chassis.position.y < -3 || Math.abs(chassis.position.x) > 80 || Math.abs(chassis.position.z) > 72) resetCart();
     return speed;
   }
   function resetCart() { place(SPAWN.x, SPAWN.z, SPAWN.yaw); props.forEach(p => { if (p.b.position.y < -2) { p.b.position.copy(p.home); p.b.quaternion.copy(p.homeQ); p.b.velocity.setZero(); p.b.angularVelocity.setZero(); } }); }
